@@ -2,7 +2,7 @@ import { test } from "@playwright/test";
 
 test.describe("test suite 1", () => {
   test("The first test", async ({ page }) => {
-    await page.goto("https://localhost:4200/");
+    await page.goto("http://localhost:4200/");
   });
   test("The second test", () => {});
 });
