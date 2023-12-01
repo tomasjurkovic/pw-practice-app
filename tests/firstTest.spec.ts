@@ -4,10 +4,9 @@ test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("http://localhost:4200/");
     await page.getByText("Forms").click();
+    await page.getByText("Form Layouts").first().click();
   });
   test("Find elements by locators test", async ({ page }) => {
-    await page.getByText("Form Layouts").first().click();
-
     // by tag:
     page.locator("input");
     // by ID:
@@ -28,7 +27,6 @@ test.describe("test suite 1", () => {
     page.locator(':text-is("Using the Grid")');
   });
   test("User facing locators test", async ({ page }) => {
-    await page.getByText("Form Layouts").first().click();
     await page
       .getByRole("textbox", { name: "Email" })
       .first()
@@ -41,7 +39,6 @@ test.describe("test suite 1", () => {
   });
 
   test("Find child elements test", async ({ page }) => {
-    await page.getByText("Form Layouts").first().click();
     await page.locator('nb-card nb-radio :text-is("Option 1")').click();
     await page
       .locator("nb-card")
@@ -54,5 +51,29 @@ test.describe("test suite 1", () => {
       .first()
       .click();
     await page.locator("nb-card").nth(3).getByRole("button").click();
+  });
+
+  test("Find parent elements test", async ({ page }) => {
+    await page
+      .locator("nb-card", { hasText: "Using the Grid" })
+      .getByRole("textbox", { name: "Email" })
+      .click();
+    await page
+      .locator("nb-card")
+      .filter({ hasText: "Basic form" })
+      .getByRole("textbox", { name: "Email" })
+      .click();
+
+    await page
+      .locator("nb-card")
+      .filter({ has: page.locator(".status-danger") })
+      .getByRole("textbox", { name: "Password" })
+      .click();
+
+    await page
+      .locator(':text-is("Using the Grid")')
+      .locator("..") // get one level up by using xPath
+      .getByRole("textbox", { name: "Email" })
+      .click();
   });
 });
