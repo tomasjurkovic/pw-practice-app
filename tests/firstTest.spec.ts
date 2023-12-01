@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
@@ -75,5 +75,16 @@ test.describe("test suite 1", () => {
       .locator("..") // get one level up by using xPath
       .getByRole("textbox", { name: "Email" })
       .click();
+  });
+
+  test("Reusing the locators test", async ({ page }) => {
+    // easy to refactor this using const
+    const basicForm = page.locator("nb-card", { hasText: "Using the Grid" });
+    const emailField = basicForm.getByRole("textbox", { name: "Email" });
+
+    await emailField.fill("test@playwright.com");
+    await basicForm.getByRole("textbox", { name: "Password" }).fill("nbs123");
+    await basicForm.getByRole("button").click();
+    await expect(emailField).toHaveValue("test@playwright.com");
   });
 });
