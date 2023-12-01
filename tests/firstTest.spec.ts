@@ -79,12 +79,36 @@ test.describe("test suite 1", () => {
 
   test("Reusing the locators test", async ({ page }) => {
     // easy to refactor this using const
-    const basicForm = page.locator("nb-card", { hasText: "Using the Grid" });
+    const basicForm = page.locator("nb-card", { hasText: "Basic form" });
     const emailField = basicForm.getByRole("textbox", { name: "Email" });
 
     await emailField.fill("test@playwright.com");
     await basicForm.getByRole("textbox", { name: "Password" }).fill("nbs123");
     await basicForm.getByRole("button").click();
     await expect(emailField).toHaveValue("test@playwright.com");
+  });
+
+  test("Extracting values from elements test", async ({ page }) => {
+    // extract text value from element:
+    const basicForm = page.locator("nb-card", { hasText: "Basic form" });
+    const buttonText = await basicForm.locator("button").textContent();
+
+    expect(buttonText).toEqual("Submit");
+
+    // all text values:
+    const allRadioButtonLabels = await page
+      .locator("nb-radio")
+      .allTextContents();
+    expect(allRadioButtonLabels).toContain("Option 1");
+
+    // input value extraction:
+    const emailField = basicForm.getByRole("textbox", { name: "Email" });
+    await emailField.fill("hot@mail.com");
+    const emailValue = await emailField.inputValue();
+    expect(emailValue).toEqual("hot@mail.com");
+
+    // placeholder value:
+    const placeholderValue = await emailField.getAttribute("placeholder");
+    expect(placeholderValue).toBe("Email"); // pr tpEqual works here
   });
 });
