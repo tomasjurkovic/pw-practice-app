@@ -30,4 +30,10 @@ test.describe("test suite 1", () => {
     const text = await successButton.textContent();
     expect(text).toContain("Data loaded with AJAX get request.");
   });
+
+  test("Timeouts", async ({ page }) => {
+    // test.slow() // possible to run it in slow mode with longer timeouts
+    const successButton = page.locator(".bg-success");
+    await successButton.click();
+  });
 });
