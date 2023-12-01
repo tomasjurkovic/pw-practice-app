@@ -39,4 +39,20 @@ test.describe("test suite 1", () => {
     await page.getByTitle("IoT Dashboard");
     await page.getByTestId("SignIn").click();
   });
+
+  test("Find child elements test", async ({ page }) => {
+    await page.getByText("Form Layouts").first().click();
+    await page.locator('nb-card nb-radio :text-is("Option 1")').click();
+    await page
+      .locator("nb-card")
+      .locator("nb-radio")
+      .locator(':text-is("Option 2")')
+      .click();
+    await page
+      .locator("nb-card")
+      .getByRole("button", { name: "Sign in" })
+      .first()
+      .click();
+    await page.locator("nb-card").nth(3).getByRole("button").click();
+  });
 });
