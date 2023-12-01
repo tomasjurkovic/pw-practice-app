@@ -111,4 +111,23 @@ test.describe("test suite 1", () => {
     const placeholderValue = await emailField.getAttribute("placeholder");
     expect(placeholderValue).toBe("Email"); // pr tpEqual works here
   });
+
+  test("Assertion examples test", async ({ page }) => {
+    // general assertions: they will not wait for anything, they will be executed when the time comes and code gets to this line
+    const value = 5;
+    expect(value).toEqual(5);
+
+    const basicFormButton = page
+      .locator("nb-card", { hasText: "Basic form" })
+      .locator("button");
+    const text = await basicFormButton.textContent();
+    expect(text).toEqual("Submit");
+
+    // Locator assertions: they will always wait if using await
+    await expect(basicFormButton).toHaveText("Submit");
+
+    // soft assertions: test will continue even when they fail
+    await expect.soft(basicFormButton).toHaveText("Submit5"); // test will continue even if we know that it should fail and correct text is 'Submit'
+    await basicFormButton.click();
+  });
 });
