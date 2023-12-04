@@ -185,9 +185,10 @@ test.describe("test suite 2", () => {
       .locator("tr", { hasText: "twitter@outlook.com" });
 
     await thirdRow.locator(".nb-edit").click({ force: true });
-    // check
-    await thirdRow.locator(".nb-checkmark").click({ force: true });
+    await page.locator("input-editor").getByPlaceholder("Age").clear();
+    await page.locator("input-editor").getByPlaceholder("Age").fill("25");
+    await page.locator(".nb-checkmark").click({ force: true });
 
-    await expect(thirdRow).toHaveText("25");
+    await expect(thirdRow).toContainText("25");
   });
 });
