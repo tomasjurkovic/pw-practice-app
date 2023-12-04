@@ -30,6 +30,40 @@ test.describe("test suite 1", () => {
       hasText: "Using the Grid",
     });
 
-    await usingTheGridForm.getByLabel("Option 1").click();
+    // option one:
+    // await usingTheGridForm.getByLabel("Option 1").check({ force: true });
+    // option two:
+    await usingTheGridForm
+      .getByRole("radio", { name: "Option 1" })
+      .check({ force: true });
+
+    // asserion if field is checked:
+    const radioStatus = await usingTheGridForm
+      .getByRole("radio", { name: "Option 1" })
+      .isChecked();
+    expect(radioStatus).toBeTruthy();
+    // another option:
+    await expect(
+      usingTheGridForm.getByRole("radio", { name: "Option 1" })
+    ).toBeChecked();
+
+    // check second radio button:
+    await usingTheGridForm
+      .getByRole("radio", { name: "Option 2" })
+      .check({ force: true });
+
+    // validate option 2 is checked
+    expect(
+      await usingTheGridForm
+        .getByRole("radio", { name: "Option 2" })
+        .isChecked()
+    ).toBeTruthy();
+
+    // validate option 1 is nit checked anymore:
+    expect(
+      await usingTheGridForm
+        .getByRole("radio", { name: "Option 1" })
+        .isChecked()
+    ).toBeFalsy();
   });
 });
