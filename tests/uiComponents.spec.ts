@@ -67,3 +67,34 @@ test.describe("test suite 1", () => {
     ).toBeFalsy();
   });
 });
+
+test.describe("test suite 2", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("http://localhost:4200/");
+  });
+  test("checkboxes", async ({ page }) => {
+    await page.getByText("Modal & Overlays").click();
+    await page.getByText("Toastr").click();
+    await page
+      .getByRole("checkbox", { name: "Hide on click" })
+      .uncheck({ force: true });
+
+    await page
+      .getByRole("checkbox", { name: "Prevent arising of duplicate toast" })
+      .check({ force: true });
+
+    // check all checkboxes:
+    const allCheckboxes = page.getByRole("checkbox");
+    // verify all are checked
+    for (const checkbox of await allCheckboxes.all()) {
+      // allCheckboxes.all() will do an array from the list
+      await checkbox.check({ force: true });
+      expect(await checkbox.isChecked()).toBeTruthy();
+    }
+    // verify all are unchecked
+    for (const checkbox of await allCheckboxes.all()) {
+      await checkbox.uncheck({ force: true });
+      expect(await checkbox.isChecked()).toBeFalsy();
+    }
+  });
+});
