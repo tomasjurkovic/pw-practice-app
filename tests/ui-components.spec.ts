@@ -191,4 +191,25 @@ test.describe("test suite 2", () => {
 
     await expect(thirdRow).toContainText("25");
   });
+
+  test("tables - modify email of the  user found by an ID", async ({
+    page,
+  }) => {
+    await page.getByText("Tables & Data").click();
+    await page.getByText("Smart Table").click();
+    // GO TO SECOND PAGE:
+    // await page.locator(".ng2-smart-pagination-nav").getByText("2").click();
+    const targetRowById = page
+      .getByRole("row", { name: "9" })
+      .filter({ has: page.locator("td").nth(1).getByText("9") });
+    await targetRowById.locator(".nb-edit").click({ force: true });
+
+    await page.locator("input-editor").getByPlaceholder("E-mail").clear();
+    await page
+      .locator("input-editor")
+      .getByPlaceholder("E-mail")
+      .fill("changed@email.com");
+    await page.locator(".nb-checkmark").click({ force: true });
+    await expect(targetRowById).toContainText("changed@email.com");
+  });
 });
