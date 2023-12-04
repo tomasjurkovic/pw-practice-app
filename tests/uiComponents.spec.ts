@@ -17,11 +17,19 @@ test.describe("test suite 1", () => {
       delay: 500,
     });
 
-    // generic assertions:
+    // generic assertions
     const inputValue = await usingTheGridEmailInput.inputValue();
     expect(inputValue).toEqual("test@new.com");
 
     // locator assertions
     await expect(usingTheGridEmailInput).toHaveValue("test@new.com");
+  });
+
+  test("radio buttons test", async ({ page }) => {
+    const usingTheGridForm = page.locator("nb-card", {
+      hasText: "Using the Grid",
+    });
+
+    await usingTheGridForm.getByLabel("Option 1").click();
   });
 });
