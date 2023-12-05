@@ -238,9 +238,22 @@ test.describe("test suite 2", () => {
         } else {
           expect(row).toHaveText(age);
         }
-
       }
       await page.locator("input-filter").getByPlaceholder("Age").clear();
     }
+  });
+
+  test("datepicker test", async ({ page }) => {
+    await page.getByText("Forms").click();
+    await page.getByText("Datepicker").click();
+
+    const calendarInputField = page.getByPlaceholder("Form Picker");
+    await calendarInputField.click({ force: true });
+    await page
+      .locator("nb-calendar-day-cell")
+      .getByText("1", { exact: true })
+      .first()
+      .click();
+    await expect(calendarInputField).toHaveValue("Dec 1, 2023");
   });
 });
