@@ -224,13 +224,17 @@ test.describe("test suite 2", () => {
     await page.getByText("Smart Table").click();
 
     // insert filter criteria to 'Age' filter:
-    const filteredValue = "20";
-    await page.getByPlaceholder("Age").fill(filteredValue);
+    const ages = ["20", "40", "44", "55"];
 
     const rows = page.locator("tbody tr td:last-child");
 
-    for (const row of await rows.all()) {
-      expect(row).toHaveText(filteredValue);
+    for (const age of ages) {
+      await page.getByPlaceholder("Age").fill(age);
+      await page.waitForTimeout(500);
+      for (const row of await rows.all()) {
+        expect(row).toHaveText(age);
+      }
+      await page.locator("th:last-child input").clear();
     }
   });
 });
