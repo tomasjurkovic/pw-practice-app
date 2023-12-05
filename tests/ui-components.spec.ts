@@ -243,7 +243,7 @@ test.describe("test suite 2", () => {
     }
   });
 
-  test("datepicker test", async ({ page }) => {
+  test("datepicker - verify inserted date test", async ({ page }) => {
     await page.getByText("Forms").click();
     await page.getByText("Datepicker").click();
 
@@ -258,7 +258,7 @@ test.describe("test suite 2", () => {
       .getByText(expectedDate, { exact: true })
       .first()
       .click();
-    // verify if correct date was selected (Will work only in December, not great test)
+
     const expectedDateValue =
       date.toLocaleString("en-US", { month: "short" }) +
       " " +
@@ -266,5 +266,40 @@ test.describe("test suite 2", () => {
       ", " +
       date.getFullYear();
     await expect(calendarInputField).toHaveValue(expectedDateValue);
+  });
+
+  test("datepicker - browse through calendar months/years test", async ({
+    page,
+  }) => {
+    await page.getByText("Forms").click();
+    await page.getByText("Datepicker").click();
+
+    const calendarInputField = page.getByPlaceholder("Form Picker");
+    await calendarInputField.click({ force: true });
+
+    let date = new Date();
+    date.setDate(date.getDate() + 400); // 200 days from now
+    const expectedDate = date.getDate().toString();
+    const expectedMonthShort = date.toLocaleString("en-US", { month: "short" });
+    const expectedMonthLong = date.toLocaleString("En-US", { month: "long" });
+    const expectedYear = date.getFullYear();
+    const expectedMonthAndYear = ` ${expectedMonthLong} ${expectedYear} `;
+    const dateToAssert = `${expectedMonthShort} ${expectedDate}, ${expectedYear}`;
+    let calendarMonthAndYear = await page
+      .locator("nb-calendar-view-mode")
+      .textContent();
+    while (!calendarMonthAndYear.includes(expectedMonthAndYear)) {
+      await page
+        .locator('nb-calendar-pageable-navigation g[data-name="chevron-right"]')
+        .click();
+      calendarMonthAndYear = await page
+        .locator("nb-calendar-view-mode")
+        .textContent();
+    }
+    await page
+      .locator("nb-calendar-day-cell")
+      .getByText(expectedDate, { exact: true })
+      .click();
+    await expect(calendarInputField).toHaveValue(dateToAssert);
   });
 });
