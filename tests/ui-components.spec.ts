@@ -229,12 +229,12 @@ test.describe("test suite 2", () => {
     const rows = page.locator("tbody tr td:last-child");
 
     for (const age of ages) {
-      await page.getByPlaceholder("Age").fill(age);
+      await page.locator("input-filter").getByPlaceholder("Age").fill(age);
       await page.waitForTimeout(500);
       for (const row of await rows.all()) {
         expect(row).toHaveText(age);
       }
-      await page.locator("th:last-child input").clear();
+      await page.locator("input-filter").getByPlaceholder("Age").clear();
     }
   });
 });
