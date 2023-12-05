@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:63909/");
+    await page.goto("http://localhost:4200/");
     await page.getByText("Forms").click();
     await page.getByText("Form Layouts").first().click();
   });
@@ -70,7 +70,7 @@ test.describe("test suite 1", () => {
 
 test.describe("test suite 2", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:63909/");
+    await page.goto("http://localhost:4200/");
   });
   test("checkboxes", async ({ page }) => {
     await page.getByText("Modal & Overlays").click();
@@ -215,5 +215,22 @@ test.describe("test suite 2", () => {
     await expect(targetRowById.locator("td").nth(5)).toHaveText(
       "changed@email.com"
     );
+  });
+
+  test("tables - verify filtering filter by age column returns correct results ", async ({
+    page,
+  }) => {
+    await page.getByText("Tables & Data").click();
+    await page.getByText("Smart Table").click();
+
+    // insert filter criteria to 'Age' filter:
+    const filteredValue = "20";
+    await page.getByPlaceholder("Age").fill(filteredValue);
+
+    const rows = page.locator("tbody tr td:last-child");
+
+    for (const row of await rows.all()) {
+      expect(row).toHaveText(filteredValue);
+    }
   });
 });
