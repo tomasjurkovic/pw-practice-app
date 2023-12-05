@@ -211,5 +211,9 @@ test.describe("test suite 2", () => {
       .fill("changed@email.com");
     await page.locator(".nb-checkmark").click({ force: true });
     await expect(targetRowById).toContainText("changed@email.com");
+    // or it can be used this:
+    await expect(targetRowById.locator("td").nth(5)).toHaveText(
+      "changed@email.com"
+    );
   });
 });
