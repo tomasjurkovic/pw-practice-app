@@ -249,11 +249,22 @@ test.describe("test suite 2", () => {
 
     const calendarInputField = page.getByPlaceholder("Form Picker");
     await calendarInputField.click({ force: true });
+
+    let date = new Date();
+    date.setDate(date.getDate() + 1); // one day from now
+    const expectedDate = date.getDate().toString();
     await page
       .locator("nb-calendar-day-cell")
-      .getByText("1", { exact: true })
+      .getByText(expectedDate, { exact: true })
       .first()
       .click();
-    await expect(calendarInputField).toHaveValue("Dec 1, 2023");
+    // verify if correct date was selected (Will work only in December, not great test)
+    const expectedDateValue =
+      date.toLocaleString("en-US", { month: "short" }) +
+      " " +
+      date.getDate() +
+      ", " +
+      date.getFullYear();
+    await expect(calendarInputField).toHaveValue(expectedDateValue);
   });
 });
