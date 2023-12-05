@@ -224,6 +224,7 @@ test.describe("test suite 2", () => {
     await page.getByText("Smart Table").click();
 
     // insert filter criteria to 'Age' filter:
+
     const ages = ["20", "40", "44", "55", "2000"];
 
     const rows = page.locator("tbody tr td:last-child");
@@ -237,6 +238,7 @@ test.describe("test suite 2", () => {
         } else {
           expect(row).toHaveText(age);
         }
+
       }
       await page.locator("input-filter").getByPlaceholder("Age").clear();
     }
