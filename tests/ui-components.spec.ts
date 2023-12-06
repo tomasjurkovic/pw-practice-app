@@ -302,4 +302,88 @@ test.describe("test suite 2", () => {
       .click();
     await expect(calendarInputField).toHaveValue(dateToAssert);
   });
+
+  test("manipulating with sliders - shortcut one test", async ({ page }) => {
+    await page.getByText("IoT Dashboard").click();
+    await page.getByText("Humidity").click();
+    await page.getByText("Temperature").click();
+
+    // update attribute:
+    const tempGauge = page.locator("[tabtitle='Temperature'] circle");
+    await tempGauge.evaluate((node) => {
+      node.setAttribute("cx", "232.630");
+      node.setAttribute("cy", "232.630");
+    });
+    // this is a shortcut to do so:
+    await tempGauge.click();
+  });
+
+  test("manipulating with sliders - mouse movement to the right test", async ({
+    page,
+  }) => {
+    await page.getByText("IoT Dashboard").click();
+
+    // update attribute:
+    const tempBox = page.locator(
+      "[tabtitle='Temperature'] ngx-temperature-dragger"
+    );
+
+    await tempBox.scrollIntoViewIfNeeded();
+    // it will scroll down so whole element is visible on the screen
+
+    // it is important to scroll before into view
+    const box = await tempBox.boundingBox();
+
+    // define center of box to be a staring point
+    // otherwise it is top left corner
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+
+    // moving mouse to location where I want to start:
+    await page.mouse.move(x, y);
+    await page.mouse.down(); // click the mouse button to begin movement
+    // move to right:
+    await page.mouse.move(x + 100, y);
+    // move it down:
+    await page.mouse.move(x + 100, y + 100);
+    // end mouse movement:
+    await page.mouse.up();
+    // this will move slider to max value (to the right end of the curvy line)
+
+    await expect(tempBox).toContainText("30");
+  });
+
+  test("manipulating with sliders - mouse movement to the left test", async ({
+    page,
+  }) => {
+    await page.getByText("IoT Dashboard").click();
+
+    // update attribute:
+    const tempBox = page.locator(
+      "[tabtitle='Temperature'] ngx-temperature-dragger"
+    );
+
+    await tempBox.scrollIntoViewIfNeeded();
+    // it will scroll down so whole element is visible on the screen
+
+    // it is important to scroll before into view
+    const box = await tempBox.boundingBox();
+
+    // define center of box to be a staring point
+    // otherwise it is top left corner
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+
+    // this will move slider to the opposite side (left end of curvy line)
+    await page.mouse.move(x, y);
+    await page.mouse.down(); // click the mouse button to begin movement
+    // move to right:
+    await page.mouse.move(x - 100, y);
+    // move it down:
+    await page.mouse.move(x - 100, y + 100);
+    // end mouse movement:
+    await page.mouse.up();
+
+    await expect(tempBox).toContainText("13 Celsius");
+  });
 });
