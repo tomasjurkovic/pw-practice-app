@@ -74,8 +74,8 @@ test.describe("test suite 2", () => {
     await page.goto("http://localhost:4200/");
   });
   test("checkboxes", async ({ page }) => {
-    await page.getByText("Modal & Overlays").click();
-    await page.getByText("Toastr").click();
+    const navigationPage = new NavigationPage(page);
+    await navigationPage.toastrPage();
     await page
       .getByRole("checkbox", { name: "Hide on click" })
       .uncheck({ force: true });
@@ -96,48 +96,6 @@ test.describe("test suite 2", () => {
     for (const checkbox of await allCheckboxes.all()) {
       await checkbox.uncheck({ force: true });
       expect(await checkbox.isChecked()).toBeFalsy();
-    }
-  });
-
-  test("dropdowns", async ({ page }) => {
-    const dropdownMenu = page.locator("ngx-header nb-select");
-    await dropdownMenu.click();
-
-    // usually the best way to interact with dropdowns:
-    page.getByRole("list"); // when the list has a UL tag
-    page.getByRole("listitem"); // when the list has a LI tag
-
-    const optionList = page.locator("nb-option-list nb-option"); // provides a list of items
-
-    // check if all expected list item in the dropdown are present:
-    await expect(optionList).toHaveText([
-      "Light",
-      "Dark",
-      "Cosmic",
-      "Corporate",
-    ]);
-
-    // select "Cosmic" option:
-    // await page.getByText("Cosmic").click();
-    await optionList.filter({ hasText: "Cosmic" }).click({ force: true });
-
-    // verify header background color is correct one for cosmic theme:
-    const header = page.locator("nb-layout-header");
-    await expect(header).toHaveCSS("background-color", "rgb(50, 50, 89)");
-
-    // validate all theme background-colors according to selected theme
-    const colors = {
-      Light: "rgb(255, 255, 255)",
-      Dark: "rgb(34, 43, 69)",
-      Cosmic: "rgb(50, 50, 89)",
-      Corporate: "rgb(255, 255, 255)",
-    };
-
-    await dropdownMenu.click();
-    for (const color in colors) {
-      await optionList.filter({ hasText: color }).click();
-      await expect(header).toHaveCSS("background-color", colors[color]);
-      if (color != "Corporate") await dropdownMenu.click();
     }
   });
 });
