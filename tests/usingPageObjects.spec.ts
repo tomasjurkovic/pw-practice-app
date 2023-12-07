@@ -1,0 +1,143 @@
+import { expect, test } from "@playwright/test";
+import { NavigationPage } from "../page-objects/navigationPage";
+
+test.describe("test suite 1", () => {
+  test.beforeEach(async ({ page }) => {
+    const navigationPage = new NavigationPage(page);
+    await page.goto("http://localhost:4200/");
+    await navigationPage.formLayoutsPage();
+  });
+  test("Input fields test", async ({ page }) => {
+    const usingTheGridEmailInput = page
+      .locator("nb-card", { hasText: "Using the Grid" })
+      .getByRole("textbox", { name: "Email" });
+
+    await usingTheGridEmailInput.fill("demo@email.com");
+    await usingTheGridEmailInput.clear();
+    await usingTheGridEmailInput.pressSequentially("test@new.com", {
+      delay: 500,
+    });
+
+    // generic assertions
+    const inputValue = await usingTheGridEmailInput.inputValue();
+    expect(inputValue).toEqual("test@new.com");
+
+    // locator assertions
+    await expect(usingTheGridEmailInput).toHaveValue("test@new.com");
+  });
+
+  test("radio buttons test", async ({ page }) => {
+    const usingTheGridForm = page.locator("nb-card", {
+      hasText: "Using the Grid",
+    });
+
+    // option one:
+    // await usingTheGridForm.getByLabel("Option 1").check({ force: true });
+    // option two:
+    await usingTheGridForm
+      .getByRole("radio", { name: "Option 1" })
+      .check({ force: true });
+
+    // asserion if field is checked:
+    const radioStatus = await usingTheGridForm
+      .getByRole("radio", { name: "Option 1" })
+      .isChecked();
+    expect(radioStatus).toBeTruthy();
+    // another option:
+    await expect(
+      usingTheGridForm.getByRole("radio", { name: "Option 1" })
+    ).toBeChecked();
+
+    // check second radio button:
+    await usingTheGridForm
+      .getByRole("radio", { name: "Option 2" })
+      .check({ force: true });
+
+    // validate option 2 is checked
+    expect(
+      await usingTheGridForm
+        .getByRole("radio", { name: "Option 2" })
+        .isChecked()
+    ).toBeTruthy();
+
+    // validate option 1 is nit checked anymore:
+    expect(
+      await usingTheGridForm
+        .getByRole("radio", { name: "Option 1" })
+        .isChecked()
+    ).toBeFalsy();
+  });
+});
+
+test.describe("test suite 2", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("http://localhost:4200/");
+  });
+  test("checkboxes", async ({ page }) => {
+    await page.getByText("Modal & Overlays").click();
+    await page.getByText("Toastr").click();
+    await page
+      .getByRole("checkbox", { name: "Hide on click" })
+      .uncheck({ force: true });
+
+    await page
+      .getByRole("checkbox", { name: "Prevent arising of duplicate toast" })
+      .check({ force: true });
+
+    // check all checkboxes:
+    const allCheckboxes = page.getByRole("checkbox");
+    // verify all are checked
+    for (const checkbox of await allCheckboxes.all()) {
+      // allCheckboxes.all() will do an array from the list
+      await checkbox.check({ force: true });
+      expect(await checkbox.isChecked()).toBeTruthy();
+    }
+    // verify all are unchecked
+    for (const checkbox of await allCheckboxes.all()) {
+      await checkbox.uncheck({ force: true });
+      expect(await checkbox.isChecked()).toBeFalsy();
+    }
+  });
+
+  test("dropdowns", async ({ page }) => {
+    const dropdownMenu = page.locator("ngx-header nb-select");
+    await dropdownMenu.click();
+
+    // usually the best way to interact with dropdowns:
+    page.getByRole("list"); // when the list has a UL tag
+    page.getByRole("listitem"); // when the list has a LI tag
+
+    const optionList = page.locator("nb-option-list nb-option"); // provides a list of items
+
+    // check if all expected list item in the dropdown are present:
+    await expect(optionList).toHaveText([
+      "Light",
+      "Dark",
+      "Cosmic",
+      "Corporate",
+    ]);
+
+    // select "Cosmic" option:
+    // await page.getByText("Cosmic").click();
+    await optionList.filter({ hasText: "Cosmic" }).click({ force: true });
+
+    // verify header background color is correct one for cosmic theme:
+    const header = page.locator("nb-layout-header");
+    await expect(header).toHaveCSS("background-color", "rgb(50, 50, 89)");
+
+    // validate all theme background-colors according to selected theme
+    const colors = {
+      Light: "rgb(255, 255, 255)",
+      Dark: "rgb(34, 43, 69)",
+      Cosmic: "rgb(50, 50, 89)",
+      Corporate: "rgb(255, 255, 255)",
+    };
+
+    await dropdownMenu.click();
+    for (const color in colors) {
+      await optionList.filter({ hasText: color }).click();
+      await expect(header).toHaveCSS("background-color", colors[color]);
+      if (color != "Corporate") await dropdownMenu.click();
+    }
+  });
+});
