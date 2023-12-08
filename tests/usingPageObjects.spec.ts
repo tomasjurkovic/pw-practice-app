@@ -1,11 +1,24 @@
 import { expect, test } from "@playwright/test";
 import { NavigationPage } from "../page-objects/navigationPage";
+import { FormLayoutsPage } from "../page-objects/formLayoutsPage";
 
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
     const navigationPage = new NavigationPage(page);
     await page.goto("http://localhost:4200/");
     await navigationPage.formLayoutsPage();
+  });
+
+  test("Login with valid credentials via Using The Grid Form test", async ({
+    page,
+  }) => {
+    const formLayoutsPage = new FormLayoutsPage(page);
+    formLayoutsPage.submitUsingTheGridFormWithCredentialsAndSelectOption(
+      "name",
+      "password",
+      "Option 1"
+    );
+    await page.waitForTimeout(2000);
   });
   test("Input fields test", async ({ page }) => {
     const usingTheGridEmailInput = page
