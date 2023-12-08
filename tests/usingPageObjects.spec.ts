@@ -20,6 +20,18 @@ test.describe("test suite 1", () => {
     );
     await page.waitForTimeout(2000);
   });
+
+  test("Login with valid credentials and with using remember me checkbox in Horizontal form tab test", async ({
+    page,
+  }) => {
+    const formLayoutsPage = new FormLayoutsPage(page);
+    formLayoutsPage.submitUsingTheGridFormWithCredentialsAndCheckbox(
+      "name",
+      "password",
+      true
+    );
+    await page.waitForTimeout(2000);
+  });
   test("Input fields test", async ({ page }) => {
     const usingTheGridEmailInput = page
       .locator("nb-card", { hasText: "Using the Grid" })
