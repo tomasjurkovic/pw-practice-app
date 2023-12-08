@@ -20,6 +20,19 @@ export class DatepickerPage {
     await expect(this.commonDatepickerInput).toHaveValue(dateToAssert);
   }
 
+  async selectDatepickerWithRangeFromToday(
+    startDateFromToday: number,
+    endDateFromToday: number
+  ) {
+    await this.rangeDatepickerInput.click();
+    const dateToAssertStart = await this.selectDateInCalendar(
+      startDateFromToday
+    );
+    const dateToAssertEnd = await this.selectDateInCalendar(endDateFromToday);
+    const dateRangeToAssert = `${dateToAssertStart} - ${dateToAssertEnd}`;
+    expect(this.rangeDatepickerInput).toHaveValue(dateRangeToAssert);
+  }
+
   private async selectDateInCalendar(daysFromNow: number) {
     let date = new Date();
     date.setDate(date.getDate() + daysFromNow);
@@ -41,7 +54,7 @@ export class DatepickerPage {
         .textContent();
     }
     await this.page
-      .locator("nb-calendar-day-cell")
+      .locator(".day-cell.ng-star-inserted")
       .getByText(expectedDate, { exact: true })
       .click();
     return dateToAssert;
