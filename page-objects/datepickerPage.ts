@@ -16,10 +16,8 @@ export class DatepickerPage {
 
   async selectCommonDatePickerDateFromToday(daysFromNow: number) {
     await this.commonDatepickerInput.click();
-    const dateToAssert = await this.selectCommonDatePickerDateFromToday(
-      daysFromNow
-    );
-    await expect(this.commonDatepickerInput).toHaveValue(`${dateToAssert}`);
+    const dateToAssert = await this.selectDateInCalendar(daysFromNow);
+    await expect(this.commonDatepickerInput).toHaveValue(dateToAssert);
   }
 
   private async selectDateInCalendar(daysFromNow: number) {
