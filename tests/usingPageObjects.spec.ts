@@ -63,4 +63,9 @@ test.describe("Test Suite 2", () => {
     const datePickerPage = new DatepickerPage(page);
     datePickerPage.selectCommonDatePickerDateFromToday(50);
   });
+  test("Assert if correct date range was selected test", async ({ page }) => {
+    const datePickerPage = new DatepickerPage(page);
+    datePickerPage.selectDatepickerWithRangeFromToday(50, 100);
+    await page.waitForTimeout(2000);
+  });
 });
