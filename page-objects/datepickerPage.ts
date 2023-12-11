@@ -1,13 +1,13 @@
 import { Locator, Page, expect } from "@playwright/test";
+import { HelperBase } from "./helperBase";
 
-export class DatepickerPage {
-  readonly page: Page;
+export class DatepickerPage extends HelperBase {
   readonly commonDatepickerInput: Locator;
   readonly rangeDatepickerInput: Locator;
   readonly minMaxDatepickerInput: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     // Horizontal form section:
     this.commonDatepickerInput = page.getByPlaceholder("Form Picker");
     this.rangeDatepickerInput = page.getByPlaceholder("Range Picker");
