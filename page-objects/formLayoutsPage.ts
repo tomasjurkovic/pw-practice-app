@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
+import { HelperBase } from "./helperBase";
 
-export class FormLayoutsPage {
-  readonly page: Page;
+export class FormLayoutsPage extends HelperBase {
   // Horizontal Form section:
   readonly emailHFInput: Locator;
   readonly passwordHFInput: Locator;
@@ -17,7 +17,7 @@ export class FormLayoutsPage {
   readonly signInUSGBtn: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     // Horizontal form section:
     this.emailHFInput = page.locator("#inputEmail3");
     this.passwordHFInput = page.locator("#inputPassword3");

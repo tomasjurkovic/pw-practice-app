@@ -1,20 +1,18 @@
 import { expect, test } from "@playwright/test";
-import { NavigationPage } from "../page-objects/navigationPage";
-import { FormLayoutsPage } from "../page-objects/formLayoutsPage";
-import { DatepickerPage } from "../page-objects/datepickerPage";
+import { PageManager } from "../page-objects/pageManager";
 
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
-    const navigationPage = new NavigationPage(page);
+    const pm = new PageManager(page);
     await page.goto("http://localhost:4200/");
-    await navigationPage.formLayoutsPage();
+    await pm.onNavigationPage().formLayoutsPage();
   });
 
   test("Login with valid credentials via Using The Grid Form test", async ({
     page,
   }) => {
-    const formLayoutsPage = new FormLayoutsPage(page);
-    formLayoutsPage.submitUsingTheGridFormWithCredentialsAndSelectOption(
+    const pm = new PageManager(page);
+    pm.onFormLayoutsPage().submitUsingTheGridFormWithCredentialsAndSelectOption(
       "name",
       "password",
       "Option 1"
@@ -25,8 +23,8 @@ test.describe("test suite 1", () => {
   test("Login with valid credentials and with using remember me checkbox in Horizontal form tab test", async ({
     page,
   }) => {
-    const formLayoutsPage = new FormLayoutsPage(page);
-    formLayoutsPage.submitUsingTheGridFormWithCredentialsAndCheckbox(
+    const pm = new PageManager(page);
+    pm.onFormLayoutsPage().submitUsingTheGridFormWithCredentialsAndCheckbox(
       "name",
       "password",
       true
@@ -55,17 +53,17 @@ test.describe("test suite 1", () => {
 
 test.describe("Test Suite 2", () => {
   test.beforeEach(async ({ page }) => {
-    const navigationPage = new NavigationPage(page);
+    const pm = new PageManager(page);
     await page.goto("http://localhost:4200/");
-    await navigationPage.datepickerPage();
+    await pm.onNavigationPage().datepickerPage();
   });
   test("Assert if correct date was selected test", async ({ page }) => {
-    const datePickerPage = new DatepickerPage(page);
-    datePickerPage.selectCommonDatePickerDateFromToday(50);
+    const pm = new PageManager(page);
+    pm.onDatepickerPage().selectCommonDatePickerDateFromToday(50);
   });
   test("Assert if correct date range was selected test", async ({ page }) => {
-    const datePickerPage = new DatepickerPage(page);
-    datePickerPage.selectDatepickerWithRangeFromToday(50, 100);
+    const pm = new PageManager(page);
+    pm.onDatepickerPage().selectDatepickerWithRangeFromToday(50, 100);
     await page.waitForTimeout(2000);
   });
 });
