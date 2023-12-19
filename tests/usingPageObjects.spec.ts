@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { PageManager } from "../page-objects/pageManager";
+import { faker } from "@faker-js/faker";
 
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
@@ -24,8 +25,10 @@ test.describe("test suite 1", () => {
     page,
   }) => {
     const pm = new PageManager(page);
+    const randomFullName = faker.person.fullName();
+    console.log(randomFullName);
     pm.onFormLayoutsPage().submitUsingTheGridFormWithCredentialsAndCheckbox(
-      "name",
+      randomFullName,
       "password",
       true
     );
