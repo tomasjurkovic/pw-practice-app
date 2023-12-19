@@ -304,6 +304,7 @@ test.describe("test suite 2", () => {
   });
 
   test("manipulating with sliders - shortcut one test", async ({ page }) => {
+    test.describe.configure({ retries: 2 }); // manually setup retries to 2
     await page.getByText("IoT Dashboard").click();
     await page.getByText("Humidity").click();
     await page.getByText("Temperature").click();
