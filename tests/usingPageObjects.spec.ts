@@ -18,6 +18,12 @@ test.describe("test suite 1", () => {
       "password",
       "Option 1"
     );
+    // create screenshot of whole screen:
+    await page.screenshot({ path: "screenshots/formsLayoutPage.png" });
+    // create screenshot of single element only:
+    await page
+      .locator("nb-card", { hasText: "Inline form" })
+      .screenshot({ path: "screenshots/inlineForm.png" });
     await page.waitForTimeout(2000);
   });
 
