@@ -1,8 +1,10 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "../test-options";
+// needed to be imported here separately / test & expect
 
 test.describe("drag and drop with iFrames", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("http://www.globalsqa.com/draganddrop");
+  test.beforeEach(async ({ page, globalsQaURL }) => {
+    await page.goto(globalsQaURL);
   });
 
   test("drag and drop iFrames element test", async ({ page }) => {
