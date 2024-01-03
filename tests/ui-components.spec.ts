@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:4200/");
+    await page.goto("/");
     await page.getByText("Forms").click();
     await page.getByText("Form Layouts").first().click();
   });
@@ -70,7 +70,7 @@ test.describe("test suite 1", () => {
 
 test.describe("test suite 2", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:4200/");
+    await page.goto("/");
   });
   test("checkboxes", async ({ page }) => {
     await page.getByText("Modal & Overlays").click();

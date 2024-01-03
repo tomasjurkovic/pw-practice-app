@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker";
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
     const pm = new PageManager(page);
-    await page.goto("http://localhost:4200/");
+    await page.goto("/");
     await pm.onNavigationPage().formLayoutsPage();
   });
 
@@ -63,7 +63,7 @@ test.describe("test suite 1", () => {
 test.describe("Test Suite 2", () => {
   test.beforeEach(async ({ page }) => {
     const pm = new PageManager(page);
-    await page.goto("http://localhost:4200/");
+    await page.goto("/");
     await pm.onNavigationPage().datepickerPage();
   });
   test("Assert if correct date was selected test", async ({ page }) => {
