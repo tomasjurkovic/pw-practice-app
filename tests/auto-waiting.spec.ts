@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("test suite 1", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://www.uitestingplayground.com/ajax");
+    await page.goto(process.env.URL);
     await page.getByText("Button Triggering AJAX Request").click();
   });
   test("Find elements by locators test", async ({ page }) => {
