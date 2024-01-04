@@ -1,8 +1,10 @@
 import { test as base } from "@playwright/test";
+import { PageManager } from "./page-objects/pageManager";
 
 export type TestOptions = {
   globalsQaURL: string;
   formLayoutPage: string;
+  pageManager: PageManager;
 };
 
 export const test = base.extend<TestOptions>({
@@ -17,4 +19,9 @@ export const test = base.extend<TestOptions>({
     },
     { auto: true },
   ],
+
+  pageManager: async ({ page }, use) => {
+    const pm = new PageManager(page);
+    await use(pm);
+  },
 });
