@@ -1,12 +1,8 @@
-import { expect, test } from "@playwright/test";
+import { test } from "../test-options";
 import { PageManager } from "../page-objects/pageManager";
 import { faker } from "@faker-js/faker";
 
 test.describe("test suite 1", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/");
-  });
-
   test("Login with valid credentials via Using The Grid Form test", async ({
     page,
   }) => {
@@ -15,7 +11,7 @@ test.describe("test suite 1", () => {
     const randomEmail = `${randomFullName.replace(" ", "")}${faker.number.int(
       1000
     )}@test.sk`;
-    await pm.onNavigationPage().formLayoutsPage();
+
     await pm
       .onFormLayoutsPage()
       .submitUsingTheGridFormWithCredentialsAndSelectOption(
