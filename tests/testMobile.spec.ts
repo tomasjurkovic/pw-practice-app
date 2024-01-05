@@ -1,10 +1,17 @@
 import { test } from "@playwright/test";
 
-test("Input fields test", async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto("/");
-  await page.locator("g[data-name$='menu-2']").click();
+});
+test("Input fields test", async ({ page }, testInfo) => {
+  if (testInfo.project.name === "mobile") {
+    await page.locator(".sidebar-toggle").click();
+  }
   await page.getByText("Forms").click();
   await page.getByText("Form Layouts").first().click();
+  if (testInfo.project.name === "mobile") {
+    await page.locator(".sidebar-toggle").click();
+  }
 
   const usingTheGridEmailInput = page
     .locator("nb-card", { hasText: "Using the Grid" })
