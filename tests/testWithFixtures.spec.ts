@@ -2,7 +2,7 @@ import { test } from "../test-options";
 import { faker } from "@faker-js/faker";
 
 test.describe("test suite 1", () => {
-  test("Login with valid credentials via Using The Grid Form test", async ({
+  test("Login with valid credentials via Using The Grid Form test @regression", async ({
     pageManager,
   }) => {
     const randomFullName = faker.person.fullName();
