@@ -63,5 +63,16 @@ export default defineConfig<TestOptions>({
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
     },
+    {
+      name: "pageObjectFullScreen",
+      use: {
+        viewport: { width: 1920, height: 1080 },
+      },
+    },
+    {
+      name: "mobile",
+      testMatch: "testMobile.spec.ts",
+      use: { ...devices["iPhone 13 Pro"] },
+    },
   ],
 });
