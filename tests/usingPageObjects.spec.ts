@@ -9,7 +9,9 @@ test.describe("test suite 1", () => {
     await pm.onNavigationPage().formLayoutsPage();
   });
 
-  test("Login with valid credentials via Using The Grid Form test", async ({
+  // multiple tags can be assigned to one test like this @tag1 @tag2...
+
+  test("Login with valid credentials via Using The Grid Form test @smoke @regression", async ({
     page,
   }) => {
     const pm = new PageManager(page);
@@ -27,7 +29,7 @@ test.describe("test suite 1", () => {
     await page.waitForTimeout(2000);
   });
 
-  test("Login with valid credentials and with using remember me checkbox in Horizontal form tab test", async ({
+  test("Login with valid credentials and with using remember me checkbox in Horizontal form tab test @smoke", async ({
     page,
   }) => {
     const pm = new PageManager(page);
